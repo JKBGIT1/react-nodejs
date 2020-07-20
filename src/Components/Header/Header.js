@@ -23,7 +23,8 @@ class Header extends React.Component {
                     fontSize: "16px"
                 }
             },
-            inputText: ""
+            inputText: "",
+            searchingCity: null,
         }
     }
 
@@ -31,8 +32,21 @@ class Header extends React.Component {
         this.setState({inputText: event.target.value});
     }
 
-    getRestaurantByCity = () => {
-        console.log(this.state.inputText);
+    getCity = () => {
+        fetch(`https://developers.zomato.com/api/v2.1/cities?q=${this.state.inputText}`, {
+            method: 'get',
+            headers: new Headers({
+                "user-key": "596aefd8ba1b3c415c0ef3fc3523449b",
+                "content-type": "application/json"
+            }),
+        })
+            .then(response => response.json())
+            .then(data => console.log(data.location_suggestions[0].id))
+            .catch(error => console.log(error));
+    }
+
+    getRestaurantsByCity = () => {
+        this.getCity();
     }
 
     render() {
@@ -42,7 +56,7 @@ class Header extends React.Component {
                     <Toolbar>
                         <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
                         <input type={"text"} placeholder={"Search by city"} style={this.state.styles.input} onChange={this.changeInputText}/>
-                        <IconButton onClick={this.getRestaurantByCity}>
+                        <IconButton onClick={this.getRestaurantsByCity}>
                             <SearchIcon color={"inherit"}/>
                         </IconButton>
                         <div style={this.state.styles.divFlex}/>
