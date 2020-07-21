@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import ReactDOM from 'react-dom';
 import Header from "./Components/Header/Header";
 import Main from "./Components/Main/Main";
+import ContextProvider from "./Contexts/Context";
 
 const getCategories = () => {
     fetch('https://developers.zomato.com/api/v2.1/categories', {
@@ -18,10 +19,12 @@ const getCategories = () => {
 
 const App = () => {
     return (
-        <Grid container direction={"column"}>
-            <Header/>
-            <Main/>
-        </Grid>
+        <ContextProvider>
+            <Grid container direction={"column"}>
+                <Header/>
+                <Main/>
+            </Grid>
+        </ContextProvider>
     );
 }
 

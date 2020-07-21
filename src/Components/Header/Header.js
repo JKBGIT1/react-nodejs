@@ -2,31 +2,27 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import SearchIcon from '@material-ui/icons/Search';
 import IconButton from "@material-ui/core/IconButton";
+import {Context} from "../../Contexts/Context";
+import DesktopToolBar from "./DesktopToolBar";
+import MenuIcon from '@material-ui/icons/Menu';
+import MobileToolBar from "./MobileToolBar";
+import MobileMenu from "./MobileMenu";
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             styles: {
-                divFlex: {
-                    flexGrow: 1
-                },
                 appBarTypo: {
                     marginRight: "16px",
                 },
-                input: {
-                    border: "none",
-                    fontSize: "16px"
-                }
             },
-            inputText: "",
-            searchingCity: null,
         }
     }
+
+    static contextType = Context;
 
     changeInputText = (event) => {
         this.setState({inputText: event.target.value});
@@ -55,13 +51,10 @@ class Header extends React.Component {
                 <AppBar color={"transparent"} position="static">
                     <Toolbar>
                         <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
-                        <input type={"text"} placeholder={"Search by city"} style={this.state.styles.input} onChange={this.changeInputText}/>
-                        <IconButton onClick={this.getRestaurantsByCity}>
-                            <SearchIcon color={"inherit"}/>
-                        </IconButton>
-                        <div style={this.state.styles.divFlex}/>
-                        <Button color={"inherit"}>Sign up</Button>
-                        <Button color={"inherit"}>Login</Button>
+                        {this.context.screenWidth > 900 ?
+                            <DesktopToolBar/> :
+                            <MobileMenu/>
+                        }
                     </Toolbar>
                 </AppBar>
             </Grid>
