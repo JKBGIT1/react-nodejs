@@ -14,16 +14,16 @@ class DesktopToolBar extends React.Component {
                     fontSize: "16px"
                 }
             },
-            inputText: "",
-            searchingCity: null,
         }
     }
+
+    static contextType = Context;
 
     render() {
         return (
             <Fragment>
-                <input style={this.state.styles.input} type={"text"} placeholder={"Search by city"}/>
-                <IconButton>
+                <input style={this.state.styles.input} type={"text"} placeholder={"Search by city"} onChange={this.context.changeInputText}/>
+                <IconButton onClick={this.context.getResByCity}>
                     <SearchIcon color={"inherit"}/>
                 </IconButton>
                 <div style={{flexGrow: 1}}/>
