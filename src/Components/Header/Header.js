@@ -26,7 +26,7 @@ class Header extends React.Component {
                     <Toolbar>
                         <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
                         <Context.Consumer>{(context) => {
-                            return context.screenWidth > 900 ? <DesktopToolBar/> : <MobileMenu/>;
+                            return context.screenWidth > 600 ? <DesktopToolBar/> : <MobileMenu/>;
                         }}
                         </Context.Consumer>
                     </Toolbar>

@@ -1,6 +1,7 @@
+import React, {Fragment} from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
-import React, {Fragment} from "react";
+import MyDrawer from "./MyDrawer";
 
 class MobileMenu extends React.Component {
     state = {
@@ -16,6 +17,7 @@ class MobileMenu extends React.Component {
                 <IconButton onClick={this.handleDrawer}>
                     <MenuIcon fontSize={"large"}/>
                 </IconButton>
+                <MyDrawer showDrawer={this.state.showDrawer} handleDrawer={this.handleDrawer}/>
             </Fragment>
         );
     }
