@@ -11,7 +11,8 @@ class DesktopToolBar extends React.Component {
             styles: {
                 input: {
                     border: "none",
-                    fontSize: "16px"
+                    fontSize: "16px",
+                    backgroundColor: "#f5f5f5",
                 }
             },
         }
