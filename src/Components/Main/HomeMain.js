@@ -9,10 +9,11 @@ class HomeMain extends React.Component {
             backgroundImg: {
                 width: "100vw",
                 height: "100vh",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundImage: `url(${Background1})`,
+                backgroundPosition: "center center",
+                backgroundRepeat: "no-repeat",
                 backgroundAttachment: "fixed",
-                backgroundImage: `url(${Background1})`
+                backgroundSize: "cover",
             },
             welcomeText: {
                 color: "white",

@@ -9,6 +9,8 @@ export const getCity = (inputCity) => {
         .then(response => response.json())
         .then(data => console.log(data.location_suggestions[0].id))
         .catch(error => console.log(error));
+
+    // fetch(`https://developers.zomato.com/api/v2.1/search?entity_id=${cityId}&entity_type=city`)
 }
 
 // export const getCategories = () => {
