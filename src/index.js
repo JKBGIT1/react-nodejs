@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Main from "./Components/Main/Main";
 import Header from "./Components/Header/Header";
 import ContextProvider from "./Contexts/Context";
-import Fade from "@material-ui/core/Fade";
 import Slide from "@material-ui/core/Slide";
 
 const App = () => {
