@@ -1,20 +1,20 @@
-import React, {Fragment} from "react";
+import React from "react";
 import ReactDOM from 'react-dom';
 import Main from "./Components/Main/Main";
-import Slide from "@material-ui/core/Slide";
 import Header from "./Components/Header/Header";
 import ContextProvider from "./Contexts/Context";
+import Fade from "@material-ui/core/Fade";
 
 const App = () => {
     return (
         <ContextProvider> {/* Poskytuje content z Contex.js pre vsetky componenty */}
             {/* Slide animacia pre nacitani stranky */}
-            <Slide direction={"up"} in={true} timeout={800} mountOnEnter unmountOnExit>
+            <Fade in={true} direction={"up"} timeout={1000}>
                 <div>
                     <Header/>
                     <Main/>
                 </div>
-            </Slide>
+            </Fade>
         </ContextProvider>
     );
 }
