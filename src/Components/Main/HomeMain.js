@@ -1,6 +1,6 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import Background1 from "../../Images/Img1.jpg";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
 class HomeMain extends React.Component {
@@ -23,8 +23,7 @@ class HomeMain extends React.Component {
 
     render() {
         return (
-            <Grid item
-                  container
+            <Grid container
                   justify={"center"}
                   alignItems={"center"}
                   style={this.state.styles.backgroundImg}

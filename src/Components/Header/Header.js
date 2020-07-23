@@ -1,5 +1,4 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -21,17 +20,15 @@ class Header extends React.Component {
 
     render() {
         return (
-            <Grid item>
-                <AppBar color={"default"}>
-                    <Toolbar>
-                        <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
-                        <Context.Consumer>{(context) => {
-                            return context.screenWidth > 600 ? <DesktopToolBar/> : <MobileMenu/>;
-                        }}
-                        </Context.Consumer>
-                    </Toolbar>
-                </AppBar>
-            </Grid>
+            <AppBar color={"default"}>
+                <Toolbar>
+                    <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
+                    <Context.Consumer>{(context) => {
+                        return context.screenWidth > 600 ? <DesktopToolBar/> : <MobileMenu/>;
+                    }}
+                    </Context.Consumer>
+                </Toolbar>
+            </AppBar>
         );
     }
 }
