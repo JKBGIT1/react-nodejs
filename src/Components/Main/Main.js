@@ -5,12 +5,12 @@ import {Context} from "../../Contexts/Context";
 
 class Main extends React.Component {
     render() {
-        return(
+        return (
             <Context.Consumer>{(context) => {
-                return context.searchingCity ? <SearchMain/> : <HomeMain/>;
+                return context.restaurantsApi ? <SearchMain/> : <HomeMain/>;
             }}
             </Context.Consumer>
-        )
+        );
     }
 }
 
