@@ -6,6 +6,7 @@ export const Context = createContext(); // Potrebne pre vyuzivanie Context API
 class ContextProvider extends React.Component {
     state = {
         screenWidth: window.innerWidth, // componenty budu podla sirky obrazovky v providerovi renderovat rozne elementy
+        clickedSearch: false,
         searchingCity: null, // sem sa ulozi id adresa vyhladavaneho mesta z API callu
         restaurantsApi: null, // sem ulozim vyhladane restauracie z api
         categoriesApi: null, // sem ulozim vsetky kategorie jedal, ktore mozu poskytovat restuaracie
@@ -29,10 +30,12 @@ class ContextProvider extends React.Component {
 
         if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju
             let result = await getRestaurants(cityId);
-            this.setState({restaurantsApi: result}); // vyhladavanie restauracii ulozim do stavu, preto s nim budem dalej pracovat
+            this.setState({restaurantsApi: result}); // vyhladavanie restauracii ulozim do stavu, pretoze s nimi budem dalej pracovat
             result.restaurants.map(restaurant => console.log(restaurant.restaurant)); // sluzi aktualne iba na kontrolu
         } else
             alert("Udaje o tomto meste nie su dostupne.");
+
+        this.setState({clickedSearch: true});
     };
     // vzdy ked sa zmeni hodnota v inpute pre search, tak sa zmeni hodnota v this.state.inputText
     changeInputText = (event) => this.setState({inputText: event.target.value});
