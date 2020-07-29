@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import {Context} from "../../Contexts/Context";
-import Typography from "@material-ui/core/Typography";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -61,7 +60,7 @@ class SearchMain extends React.Component {
                                 <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
                                     <ListSubheader component="div">Restaurants in {context.inputText}</ListSubheader>
                                 </GridListTile>
-                                {context.restaurantsApi.restaurants.map((res) => (
+                                {context.restaurantsApi.map((res) => (
                                     <GridListTile key={res.restaurant.id}>
                                         <img
                                             style={this.state.styles.noImage}
@@ -69,7 +68,7 @@ class SearchMain extends React.Component {
                                             alt={""}
                                         />
                                         <GridListTileBar
-                                            title={res.restaurant.name}
+                                            title={res.name}
                                             subtitle={<span>{res.restaurant.location.address}</span>}
                                         />
                                     </GridListTile>

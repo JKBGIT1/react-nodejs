@@ -15,8 +15,8 @@ export const getCity = async (inputCity) => {
         return null;
 }
 
-export const getRestaurants = async (cityId) => {
-    const response = await fetch(`https://developers.zomato.com/api/v2.1/search?entity_id=${cityId}&entity_type=city`, {
+export const getRestaurants = async (cityId, start) => {
+    const response = await fetch(`https://developers.zomato.com/api/v2.1/search?entity_id=${cityId}&entity_type=city&start=${start}&count=100`, {
         method: 'get',
         headers: new Headers({
             "user-key": "596aefd8ba1b3c415c0ef3fc3523449b",
@@ -24,7 +24,9 @@ export const getRestaurants = async (cityId) => {
         }),
     });
 
-    return await response.json();
+    const data = await response.json()
+    console.log(data);
+    return data.restaurants.filter((res) => res.restaurant.featured_image !== "");
 }
 
 export const getCategories = async () => {
