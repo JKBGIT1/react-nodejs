@@ -47,7 +47,6 @@ class ContextProvider extends React.Component {
 
         /*
         ** Treba upravit, zobrazovania, ak nenajde vysledky v prvych 100 restauraciach a umoznit lustrovanie stranok iba ked je lastFilter < 100
-        ** Taktiez treba zrusit zobrazovanie kategorii a nahradit niecim inym, alebo nechat tak a radsej spravit zobrazenie detailov pre restauraciu
         */
         if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju
             const onlyWithImage = await this.returnRestaurantsWithImg(cityId);
@@ -69,6 +68,8 @@ class ContextProvider extends React.Component {
         this.setState({resDetail: restaurantDetail})
         console.log(restaurantDetail);
     }
+    // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
+    backFromRestaurantDetail = () => this.setState({resDetail: null});
     // vzdy ked sa zmeni hodnota v inpute pre search, tak sa zmeni hodnota v this.state.inputText
     changeInputText = (event) => this.setState({inputText: event.target.value});
 
@@ -76,6 +77,7 @@ class ContextProvider extends React.Component {
         return(
             <Context.Provider
                 value={{...this.state,
+                        backFromRestaurantDetail: this.backFromRestaurantDetail,
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,
                         changeInputText: this.changeInputText,}}> {/* ...this.state preda vsetky udaje do value */}
