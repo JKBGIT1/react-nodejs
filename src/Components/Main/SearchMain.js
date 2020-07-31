@@ -13,8 +13,7 @@ class SearchMain extends React.Component {
                         {context.resDetail ? <RestaurantDetail context={context}/> :
                             <Restaurants context={context}/>}
                     </Grid>
-                </Grid>)
-            }
+                </Grid>)}
             </Context.Consumer>
         );
     }

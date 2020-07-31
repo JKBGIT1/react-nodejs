@@ -7,7 +7,7 @@ class Main extends React.Component {
     render() {
         return (
             <Context.Consumer>{(context) => {
-                return context.restaurantsApi ? <SearchMain/> : <HomeMain/>;
+                return context.clickedSearch ? <SearchMain/> : <HomeMain/>;
             }}
             </Context.Consumer>
         );

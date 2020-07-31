@@ -6,7 +6,8 @@ export const Context = createContext(); // Potrebne pre vyuzivanie Context API
 class ContextProvider extends React.Component {
     state = {
         screenWidth: window.innerWidth, // componenty budu podla sirky obrazovky v providerovi renderovat rozne elementy
-        resDetail: null,
+        clickedSearch: false, // po prvom vyhladani sa uz nikdy nezobrazi uvodna stranka
+        resDetail: null, // vsetky informacie o restauracie z API callu
         searchingCity: null, // sem sa ulozi id vyhladavaneho mesta z API callu
         restaurantsApi: null, // sem ulozim vyhladane restauracie z api
         lastCityFiltered: 0, // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
@@ -50,17 +51,14 @@ class ContextProvider extends React.Component {
         */
         if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju
             const onlyWithImage = await this.returnRestaurantsWithImg(cityId);
-            if (onlyWithImage.length === 0){
+            if (onlyWithImage.length === 0)
                 this.setState({restaurantsApi: null});
-                alert("No results.");
-            } else {
+            else
                 this.setState({restaurantsApi: onlyWithImage});
-            }
             console.log(this.state.restaurantsApi);
-        } else {
+        } else
             this.setState({restaurantsApi: null});
-            alert("No results.");
-        }
+        this.setState({clickedSearch: true});
     };
 
     restaurantDetail = async (restaurantId) => {
