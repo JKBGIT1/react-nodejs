@@ -22,7 +22,10 @@ class Restaurants extends React.Component {
         return (
             <Fade in={true} timeout={1000}>
                 <Card>
-                    {context.restaurantsApi ? <RestaurantsPictures context={context}/> : <NoRestaurantResults context={context}/>}
+                    {context.restaurantsApi ?
+                        <RestaurantsPictures context={context}/> :
+                        <NoRestaurantResults context={context}/>
+                    }
                 </Card>
             </Fade>
         );
@@ -47,6 +50,9 @@ const RestaurantsPictures = (props) => {
                     />
                 </GridListTile>
             ))}
+            <GridListTile key="BottomSubheader" cols={2} style={{ height: 'auto', justify: "space-between" }}>
+                <GridListSubheader context={context}/>
+            </GridListTile>
         </GridList>
     );
 }
@@ -62,13 +68,13 @@ const GridListSubheader = (props) => {
                 </ListSubheader>
             </Grid>
             <Grid item style={{ paddingLeft: "16px", paddingRight: "16px" }}>
-                {context.lastCityBeginFiltered !== 0 ?
-                    <IconButton>
+                {context.lastCityBeginFiltered[context.lastCityBeginFiltered.length - 1] !== 0 ?
+                    <IconButton onClick={context.getPreviousRestaurants}>
                         <ChevronLeftIcon/>
                     </IconButton> :
                     null
                 }
-                {context.lastCityFiltered < 100 ?
+                {context.lastCityFiltered[context.lastCityFiltered.length - 1] < 100 ?
                     <IconButton onClick={context.getNextRestaurants}>
                         <ChevronRightIcon/>
                     </IconButton> :
@@ -81,7 +87,6 @@ const GridListSubheader = (props) => {
 
 const NoRestaurantResults = (props) => {
     const context = props.context;
-    console.log(props.canBack);
 
     return (
         <Grid container direction={"column"}>
@@ -90,7 +95,7 @@ const NoRestaurantResults = (props) => {
                     <ListSubheader component="div">Restaurants in {context.inputText}</ListSubheader>
                 </Grid>
                 <Grid>
-                    {context.lastCityBeginFiltered !== 0 ?
+                    {context.lastCityBeginFiltered[context.lastCityBeginFiltered.length - 1] !== 0 ?
                         <IconButton>
                             <ChevronLeftIcon/>
                         </IconButton> :

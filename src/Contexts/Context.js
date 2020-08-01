@@ -6,13 +6,12 @@ export const Context = createContext(); // Potrebne pre vyuzivanie Context API
 class ContextProvider extends React.Component {
     state = {
         screenWidth: window.innerWidth, // componenty budu podla sirky obrazovky v providerovi renderovat rozne elementy
-        canBack: false, // ak je true, tak sa da prepnut na predoslu kartu s restauraciami
         clickedSearch: false, // po prvom vyhladani sa uz nikdy nezobrazi uvodna stranka
         resDetail: null, // vsetky informacie o restauracie z API callu
         searchingCity: null, // sem sa ulozi id vyhladavaneho mesta z API callu
         restaurantsApi: null, // sem ulozim vyhladane restauracie z api
-        lastCityBeginFiltered: 0, // vdaka tomuto sa viem presunut na predposle kartu s restauraciami
-        lastCityFiltered: 0, // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
+        lastCityBeginFiltered: [], // vdaka tomuto sa viem presunut na predposle kartu s restauraciami
+        lastCityFiltered: [], // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
         inputText: "", // nazov mesta, ktory sa po kliknuti na hladat ikonu bude vyhladavat v Zomato API
     }
     // aby som mal vzdy aktualnu sirku obrazovky, tak musim po nacitani componentu nadstavit tento EventListener
@@ -31,8 +30,21 @@ class ContextProvider extends React.Component {
         let onlyWithImage = []; // sem ukladam iba tie restauracie, ktore maju featured_image
 
         if (forward){
-            lastFilter = this.state.lastCityFiltered; // ak presiahne 100, tak zomato API mi uz neda results
-            this.setState({ lastCityBeginFiltered: lastFilter });
+            lastFilter = this.state.lastCityFiltered[this.state.lastCityFiltered.length - 1]; // ak presiahne 100, tak zomato API mi uz neda results
+            this.setState((prevState) => {prevState.lastCityBeginFiltered.push(lastFilter)});
+        } else {
+            let arr1 = this.state.lastCityBeginFiltered;
+            let arr2 = this.state.lastCityFiltered;
+
+            arr1.pop();
+            arr2.pop();
+
+            this.setState({
+                lastCityBeginFiltered: arr1,
+                lastCityFiltered: arr2,
+            });
+
+            lastFilter = arr1[arr1.length - 1];
         }
 
         while (onlyWithImage.length < 10 && lastFilter < 100) { // pokial nemam 10 restauracii, ale sa da vyhladam, tak to vykona
@@ -46,7 +58,9 @@ class ContextProvider extends React.Component {
             }
         }
 
-        this.setState({lastCityFiltered: lastFilter});
+        this.setState((prevState) => {prevState.lastCityFiltered.push(lastFilter)});
+
+        console.log(onlyWithImage);
 
         return onlyWithImage;
     }
@@ -55,22 +69,20 @@ class ContextProvider extends React.Component {
         let cityId = await getCity(this.state.inputText); // na zaklade nazvu mesta vo vyhladavani najdem jeho ID v API
         this.setState({ searchingCity: cityId }); // zmenim hodnotu premenej v stave, pretoze sa podla toho renderuje obsah
 
-        /*
-        ** Treba upravit, zobrazovania, ak nenajde vysledky v prvych 100 restauraciach a umoznit lustrovanie stranok iba ked je lastFilter < 100
-        */
         if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju
-            this.setState({ lastCityFiltered: 0 });
+            this.setState({ lastCityFiltered: [0] });
             const onlyWithImage = await this.returnRestaurantsWithImg(true);
+
             if (onlyWithImage.length === 0)
                 this.setState({restaurantsApi: null});
             else
                 this.setState({restaurantsApi: onlyWithImage});
-            console.log(this.state.restaurantsApi);
         } else {
-            this.setState({ lastCityBeginFiltered: 0 });
+            this.setState({ lastCityBeginFiltered: [] });
             this.setState({ restaurantsApi: null });
-            this.setState({ lastCityFiltered: 0 });
+            this.setState({ lastCityFiltered: [] });
         }
+
         this.setState({clickedSearch: true});
     };
 
@@ -80,8 +92,6 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
-
-        this.setState({ canBack: true });
     }
 
     getPreviousRestaurants = async () => {
@@ -90,8 +100,6 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
-
-        this.setState({ canBack: true });
     }
 
     restaurantDetail = async (restaurantId) => {
@@ -109,6 +117,7 @@ class ContextProvider extends React.Component {
             <Context.Provider
                 value={{...this.state,
                         backFromRestaurantDetail: this.backFromRestaurantDetail,
+                        getPreviousRestaurants: this.getPreviousRestaurants,
                         getNextRestaurants: this.getNextRestaurants,
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,
