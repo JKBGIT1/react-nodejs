@@ -9,7 +9,7 @@ class SearchMain extends React.Component {
         return (
             <Context.Consumer>{(context) => (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} style={{marginTop: "75px"}}>
-                    <Grid item md={10}>
+                    <Grid item md={10} style={{ width: "100%" }}>
                         {context.resDetail ? <RestaurantDetail context={context}/> :
                             <Restaurants context={context}/>}
                     </Grid>
