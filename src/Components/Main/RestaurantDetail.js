@@ -38,23 +38,25 @@ class RestaurantDetail extends React.Component {
 }
 
 const RestaurantActions = (props) => {
+    const btnSize = props.context.screenWidth < 960 ? "small" : "medium";
+
     return (
         // ked sa klikne na ktorykolvek button, okrem Back, tak stranka presmeruje pouzivatela na denne menu, fotky alebo eventy restauracie
         <CardActions>
             <Button
-                size="medium"
+                size={btnSize}
                 onClick={() => window.open(props.restaurant.menu_url, "_self")}
             >
                 Menu
             </Button>
             <Button
-                size="medium"
+                size={btnSize}
                 onClick={() => window.open(props.restaurant.photos_url, "_self")}
             >
                 Photos
             </Button>
             <Button
-                size="medium"
+                size={btnSize}
                 onClick={() => window.open(props.restaurant.events_url, "_self")}
             >
                 Events
@@ -62,7 +64,7 @@ const RestaurantActions = (props) => {
             <div style={{ flexGrow: 1 }}/>
             {/* Vrati pouzivatela spat na prehlad restauracii, ktore boli vyhladane */}
             <Button
-                size="medium"
+                size={btnSize}
                 onClick={() => props.context.backFromRestaurantDetail()}
             >
                 Back
