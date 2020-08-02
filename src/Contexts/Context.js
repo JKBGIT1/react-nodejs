@@ -95,6 +95,7 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
+        window.scrollTo({ top: 0, behavior:"smooth" });
     }
 
     getPreviousRestaurants = async () => {
@@ -103,11 +104,13 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
+        window.scrollTo({ top: 0, behavior:"smooth" });
     }
 
     restaurantDetail = async (restaurantId) => {
         const restaurantDetail = await getRestaurantDetail(restaurantId);
         this.setState({resDetail: restaurantDetail});
+        window.scrollTo({ top: 0, behavior:"smooth" });
         console.log(restaurantDetail);
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia

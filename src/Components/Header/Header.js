@@ -20,7 +20,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <AppBar id={"top"} color={"default"}>
+            <AppBar color={"default"}>
                 <Toolbar>
                     <Typography style={this.state.styles.appBarTypo} variant={"h5"}>Restaurants</Typography>
                     <Context.Consumer>{(context) => {

@@ -19,7 +19,7 @@ class RestaurantDetail extends React.Component {
 
         return (
             <Fade in={true} timeout={1000}>
-                <Card>
+                <Card style={{ margin: "0 8px 0 8px" }}>
                     <RestaurantActions context={context} restaurant={restaurant}/>
                     <CardActionArea>
                         {/* Zobrazi featured_image pre restauraciu a po kliknuti presmeruje pouzivatela na Zomato stranku restauracie */}

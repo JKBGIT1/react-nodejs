@@ -35,9 +35,9 @@ class App extends React.Component {
                 <ContextProvider> {/* Poskytuje content z Contex.js pre vsetky componenty */}
                     {/* Slide animacia pre nacitani stranky */}
                     <Slide in={true} direction={"up"} timeout={1000}>
-                        <div>
+                        <div id={"top"}>
                             <Header/>
-                            <Main/>
+                            <Main locationIds={this.state}/>
                         </div>
                     </Slide>
                 </ContextProvider>

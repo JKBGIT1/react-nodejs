@@ -25,7 +25,7 @@ class HomeMain extends React.Component {
     render() {
         return (
             <Grid container justify={"center"} alignItems={"center"} style={this.state.styles.backgroundImg}>
-                <Grid item>
+                <Grid item style={{ transition: "opacity 0.3s, transform 0.2s ease-in-out", }}>
                     <Typography variant={"h1"} style={this.state.styles.welcomeText}><b>Welcome</b></Typography>
                 </Grid>
             </Grid>
