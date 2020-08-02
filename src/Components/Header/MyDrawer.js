@@ -22,6 +22,11 @@ class MyDrawer extends React.Component {
         }
     }
 
+    searchClicked = (context, props) => {
+        context.getResByCity();
+        props.handleDrawer();
+    }
+
     static contextType = Context;
 
     render() {
@@ -35,8 +40,14 @@ class MyDrawer extends React.Component {
                 <Divider/>
                 <List>
                     <ListItem>
-                        <input style={this.state.styles.input} type={"text"} placeholder={"Search by city"} onChange={this.context.changeInputText}/>
-                        <IconButton onClick={this.context.getResByCity}>
+                        <input
+                            type={"text"}
+                            placeholder={"Search by city"}
+                            style={this.state.styles.input}
+                            onClick={this.context.deleteText}
+                            onChange={this.context.changeInputText}
+                        />
+                        <IconButton onClick={() => this.searchClicked(this.context, this.props)}>
                             <SearchIcon color={"inherit"}/>
                         </IconButton>
                     </ListItem>

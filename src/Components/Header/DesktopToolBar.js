@@ -23,7 +23,13 @@ class DesktopToolBar extends React.Component {
     render() {
         return (
             <Fragment>
-                <input style={this.state.styles.input} type={"text"} placeholder={"Search by city"} onChange={this.context.changeInputText}/>
+                <input
+                    type={"text"}
+                    placeholder={"Search by city"}
+                    style={this.state.styles.input}
+                    onClick={this.context.deleteText}
+                    onChange={this.context.changeInputText}
+                />
                 <IconButton onClick={this.context.getResByCity}>
                     <SearchIcon color={"inherit"}/>
                 </IconButton>

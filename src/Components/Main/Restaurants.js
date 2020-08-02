@@ -21,7 +21,7 @@ class Restaurants extends React.Component {
 
         return (
             <Fade in={true} timeout={1000}>
-                <Card>
+                <Card style={{ margin: "0 8px 0 8px" }}>
                     {context.restaurantsApi ?
                         <RestaurantsPictures context={context}/> :
                         <NoRestaurantResults context={context}/>
@@ -34,15 +34,22 @@ class Restaurants extends React.Component {
 
 const RestaurantsPictures = (props) => {
     const context = props.context;
+    const screenWidth = props.context.screenWidth;
+    const numOfCols = screenWidth < 600 ? 1 : 2;
+    const height = screenWidth < 1280 ? 250 : 360;
 
     return (
-        <GridList cellHeight={360}>
-            <GridListTile key="Subheader" cols={2} style={{ height: 'auto', justify: "space-between" }}>
+        <GridList cols={numOfCols} cellHeight={height}>
+            <GridListTile key="Subheader" cols={numOfCols} style={{ height: 'auto', justify: "space-between" }}>
                 <GridListSubheader context={context}/>
             </GridListTile>
             {/* Pre kazdu restauraciu, ktoru vratil API call zobrazi featured_image, nazov a adresu */}
             {context.restaurantsApi.map((res) => (
-                <GridListTile key={res.restaurant.id} onClick={() => context.restaurantDetail(res.restaurant.id)}>
+                <GridListTile
+                    id={res.restaurant.id}
+                    key={res.restaurant.id}
+                    onClick={() => context.restaurantDetail(res.restaurant.id)}
+                >
                     <img src={res.restaurant.featured_image} alt={""}/>
                     <GridListTileBar
                         title={res.restaurant.name}
@@ -50,7 +57,7 @@ const RestaurantsPictures = (props) => {
                     />
                 </GridListTile>
             ))}
-            <GridListTile key="BottomSubheader" cols={2} style={{ height: 'auto', justify: "space-between" }}>
+            <GridListTile key="BottomSubheader" cols={numOfCols} style={{ height: 'auto', justify: "space-between" }}>
                 <GridListSubheader context={context}/>
             </GridListTile>
         </GridList>
@@ -64,7 +71,7 @@ const GridListSubheader = (props) => {
         <Grid container justify={"space-between"} alignItems={"center"}>
             <Grid item>
                 <ListSubheader component="div">
-                    Restaurants in {context.inputText}
+                    Restaurants in {context.cityName}
                 </ListSubheader>
             </Grid>
             <Grid item style={{ paddingLeft: "16px", paddingRight: "16px" }}>
@@ -92,10 +99,11 @@ const NoRestaurantResults = (props) => {
         <Grid container direction={"column"}>
             <Grid item container justify={"space-between"}>
                 <Grid item>
-                    <ListSubheader component="div">Restaurants in {context.inputText}</ListSubheader>
+                    <ListSubheader component="div">Restaurants in {context.cityName}</ListSubheader>
                 </Grid>
                 <Grid>
-                    {context.lastCityBeginFiltered[context.lastCityBeginFiltered.length - 1] !== 0 ?
+                    {context.lastCityBeginFiltered[context.lastCityBeginFiltered.length - 1] !== 0 &&
+                     context.lastCityBeginFiltered.length !== 0 ?
                         <IconButton>
                             <ChevronLeftIcon/>
                         </IconButton> :

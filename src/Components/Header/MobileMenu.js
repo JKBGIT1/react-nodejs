@@ -15,7 +15,7 @@ class MobileMenu extends React.Component {
             <Fragment>
                 <div style={{flexGrow: 1}}/>
                 <IconButton onClick={this.handleDrawer}>
-                    <MenuIcon fontSize={"large"}/>
+                    <MenuIcon fontSize={"medium"}/>
                 </IconButton>
                 <MyDrawer showDrawer={this.state.showDrawer} handleDrawer={this.handleDrawer}/>
             </Fragment>

@@ -13,6 +13,7 @@ class ContextProvider extends React.Component {
         lastCityBeginFiltered: [], // vdaka tomuto sa viem presunut na predposle kartu s restauraciami
         lastCityFiltered: [], // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
         inputText: "", // nazov mesta, ktory sa po kliknuti na hladat ikonu bude vyhladavat v Zomato API
+        cityName: "", // nazov mesta, ktory bol vyhladany
     }
     // aby som mal vzdy aktualnu sirku obrazovky, tak musim po nacitani componentu nadstavit tento EventListener
     componentDidMount() {
@@ -22,6 +23,7 @@ class ContextProvider extends React.Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.screenWidthChanged);
     }
+
     // tato funckia zmeni v this.state hodnotu screenWidth, podla aktualnej sirky obrazovky
     screenWidthChanged = () => this.setState({screenWidth: window.innerWidth});
     // vyhlada sa id mesta, ktoreho nazov sa nachadza v this.state.inputText
@@ -83,7 +85,8 @@ class ContextProvider extends React.Component {
             this.setState({ lastCityFiltered: [] });
         }
 
-        this.setState({clickedSearch: true});
+        this.setState({ cityName: this.state.inputText });
+        this.setState({ clickedSearch: true });
     };
 
     getNextRestaurants = async () => {
@@ -104,13 +107,15 @@ class ContextProvider extends React.Component {
 
     restaurantDetail = async (restaurantId) => {
         const restaurantDetail = await getRestaurantDetail(restaurantId);
-        this.setState({resDetail: restaurantDetail})
+        this.setState({resDetail: restaurantDetail});
         console.log(restaurantDetail);
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
     backFromRestaurantDetail = () => this.setState({resDetail: null});
     // vzdy ked sa zmeni hodnota v inpute pre search, tak sa zmeni hodnota v this.state.inputText
     changeInputText = (event) => this.setState({inputText: event.target.value});
+    // po kliknuti na input pre vyhladvanie sa vymaze jeho predosla hodnota
+    deleteText = (event) => event.target.value = "";
 
     render() {
         return(
@@ -121,7 +126,9 @@ class ContextProvider extends React.Component {
                         getNextRestaurants: this.getNextRestaurants,
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,
-                        changeInputText: this.changeInputText,}}> {/* ...this.state preda vsetky udaje do value */}
+                        changeInputText: this.changeInputText,
+                        deleteText: this.deleteText
+                }}> {/* ...this.state preda vsetky udaje do value */}
                 {this.props.children} {/* Vsetky elementy, ktore su deti budu mat props z value */}
             </Context.Provider>
         );
