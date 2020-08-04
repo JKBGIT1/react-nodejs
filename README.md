@@ -1,3 +1,5 @@
+## Info about project
+
 This project is running on Netlify: https://5f2939c173b3f30008c49121--quizzical-gates-5c6d53.netlify.app/
 
 It was build in React. I used Material-UI library for design. Data about restaurants are fetched from Zomato API.
