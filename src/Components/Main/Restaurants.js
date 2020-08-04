@@ -22,6 +22,8 @@ class Restaurants extends React.Component {
         return (
             <Fade in={true} timeout={1000}>
                 <Card style={{ margin: "0 8px 0 8px" }}>
+                    {/* Ak sa restauracie v zadanom meste nenachadzaju, tak zobrazi NoRestaurantResults
+                        Inak zobrazi prehlad restauracii s ich featured image */}
                     {context.restaurantsApi ?
                         <RestaurantsPictures context={context}/> :
                         <NoRestaurantResults context={context}/>
@@ -43,7 +45,8 @@ const RestaurantsPictures = (props) => {
             <GridListTile key="Subheader" cols={numOfCols} style={{ height: 'auto', justify: "space-between" }}>
                 <GridListSubheader context={context}/>
             </GridListTile>
-            {/* Pre kazdu restauraciu, ktoru vratil API call zobrazi featured_image, nazov a adresu */}
+            {/* Pre kazdu restauraciu, ktoru vratil API call zobrazi featured_image, nazov a adresu
+                Ked pouzivatel klikne na obrazok restauracie, tak sa zobrazia jej detaily */}
             {context.restaurantsApi.map((res) => (
                 <GridListTile
                     id={res.restaurant.id}
@@ -68,12 +71,16 @@ const GridListSubheader = (props) => {
     const context = props.context;
 
     return (
+        // Tento Subheader sa nachadza na zaciatku aj na konci karty s restauraciami,
+        // aby mohol pouzivatel prepinat karty rychlo za sebou alebo ked sa prescrolluje az dole
         <Grid container justify={"space-between"} alignItems={"center"}>
             <Grid item>
+                {/* context.cityName je nazov mesta, v ktorom sa mali vyhladat restauracie */}
                 <ListSubheader component="div">
                     Restaurants in {context.cityName}
                 </ListSubheader>
             </Grid>
+            {/* Podla toho, ci je mozne sa prepnut na predoslu alebo nasledujucu kartu s restauraciam sa zobrazia sipky */}
             <Grid item style={{ paddingLeft: "16px", paddingRight: "16px" }}>
                 {context.lastCityBeginFiltered[context.lastCityBeginFiltered.length - 1] !== 0 ?
                     <IconButton onClick={context.getPreviousRestaurants}>
@@ -96,6 +103,8 @@ const NoRestaurantResults = (props) => {
     const context = props.context;
 
     return (
+        // nenasli sa vysledky, takze sa zobrazi No Results
+        // ak sa predtym restauracie nasli, ale uz dalsie niesu, tak ma pouzivatel moznost prepnut na predoslu kartu s restauraciami
         <Grid container direction={"column"}>
             <Grid item container justify={"space-between"}>
                 <Grid item>

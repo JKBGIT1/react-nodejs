@@ -5,7 +5,7 @@ import MyDrawer from "./MyDrawer";
 
 class MobileMenu extends React.Component {
     state = {
-        showDrawer: false
+        showDrawer: false // ak je hodnota tejto premenej false, tak je Drawer
     }
 
     handleDrawer = () => this.setState({ showDrawer: !this.state.showDrawer});
@@ -14,6 +14,7 @@ class MobileMenu extends React.Component {
         return (
             <Fragment>
                 <div style={{flexGrow: 1}}/>
+                {/* Drawer sa zobrazi po kliknuti na MenuIcon */}
                 <IconButton onClick={this.handleDrawer}>
                     <MenuIcon fontSize={"medium"}/>
                 </IconButton>

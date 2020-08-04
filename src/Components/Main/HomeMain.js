@@ -1,19 +1,24 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Background1 from "../../Images/Img1.jpg"
+
+import Background1 from "../../Images/Img1.jpg";
 
 class HomeMain extends React.Component {
     state = {
         styles: {
+            // vycentruje a roztiahne backgroundImage na sirku aj na dlzku obrazovky
+            // elementy, ktore su v dive vycentruje horizontalne aj vertikalne
             backgroundImg: {
                 width: "100vw",
                 height: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 backgroundImage: `url(${Background1})`,
-                backgroundPosition: "center center",
-                backgroundRepeat: "no-repeat",
-                backgroundAttachment: "fixed",
                 backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+                backgroundAttachment: "fixed",
             },
             welcomeText: {
                 color: "white",
@@ -23,12 +28,12 @@ class HomeMain extends React.Component {
     }
 
     render() {
+        const { styles } = this.state;
+
         return (
-            <Grid container justify={"center"} alignItems={"center"} style={this.state.styles.backgroundImg}>
-                <Grid item style={{ transition: "opacity 0.3s, transform 0.2s ease-in-out", }}>
-                    <Typography variant={"h1"} style={this.state.styles.welcomeText}><b>Welcome</b></Typography>
-                </Grid>
-            </Grid>
+            <div style={styles.backgroundImg}>
+                <Typography variant={"h1"} style={styles.welcomeText}><b>Welcome</b></Typography>
+            </div>
         );
     }
 }

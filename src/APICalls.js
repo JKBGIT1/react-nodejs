@@ -25,8 +25,7 @@ export const getRestaurants = async (cityId, start) => {
     });
 
     const data = await response.json()
-    console.log(data);
-    return data.restaurants.filter((res) => res.restaurant.featured_image !== "");
+    return data.restaurants.filter((res) => res.restaurant.featured_image !== ""); // vrati len restauracie, ktore maju featured_image
 }
 
 export const getRestaurantDetail = async (restaurantId) => {

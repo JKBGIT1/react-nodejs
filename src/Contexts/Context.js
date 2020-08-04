@@ -31,10 +31,10 @@ class ContextProvider extends React.Component {
         let lastFilter;
         let onlyWithImage = []; // sem ukladam iba tie restauracie, ktore maju featured_image
 
-        if (forward){
+        if (forward){ // prepinanie kariet restauracii dopredu v zadanom meste
             lastFilter = this.state.lastCityFiltered[this.state.lastCityFiltered.length - 1]; // ak presiahne 100, tak zomato API mi uz neda results
             this.setState((prevState) => {prevState.lastCityBeginFiltered.push(lastFilter)});
-        } else {
+        } else { // prepinanie kariet restauracii dozadu v zadanom meste
             let arr1 = this.state.lastCityBeginFiltered;
             let arr2 = this.state.lastCityFiltered;
 
@@ -62,8 +62,6 @@ class ContextProvider extends React.Component {
 
         this.setState((prevState) => {prevState.lastCityFiltered.push(lastFilter)});
 
-        console.log(onlyWithImage);
-
         return onlyWithImage;
     }
 
@@ -71,26 +69,30 @@ class ContextProvider extends React.Component {
         let cityId = await getCity(this.state.inputText); // na zaklade nazvu mesta vo vyhladavani najdem jeho ID v API
         this.setState({ searchingCity: cityId }); // zmenim hodnotu premenej v stave, pretoze sa podla toho renderuje obsah
 
-        if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju
+        if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju a maju featured_image
             this.setState({ lastCityFiltered: [0] });
-            const onlyWithImage = await this.returnRestaurantsWithImg(true);
-
+            const onlyWithImage = await this.returnRestaurantsWithImg(true); // vrati iba restauracie s featured_image
+            // ak API call nenajde restauracie s obrazkami, tak stranka zobrazi No Results
             if (onlyWithImage.length === 0)
                 this.setState({restaurantsApi: null});
             else
                 this.setState({restaurantsApi: onlyWithImage});
-        } else {
+        } else { // ak sa mesto v API nenachadza, tak musim anulovat tieto veci v stave
             this.setState({ lastCityBeginFiltered: [] });
             this.setState({ restaurantsApi: null });
             this.setState({ lastCityFiltered: [] });
         }
 
-        this.setState({ cityName: this.state.inputText });
-        this.setState({ clickedSearch: true });
+        this.setState({ cityName: this.state.inputText }); // nazov mesta, ktory sa zobrazi
+        this.setState({ clickedSearch: true }); // ak je prve vyhladavanie, tak sa prepne z domovskej stránky
+        // pouzivatel moze chcet vyhladat restauracie v inom meste, ked su na stranke zobrazene udaje o restauracie z predosleho mesta
+        // preto je potrebne zrusit toho zobrazenie a umoznit zobrazenie novych vysledkov
+        this.setState({ resDetail: null});
     };
-
+    // ak je mozne, tak sa prepne na nasledujucu kartu s restauraciami v zadanom meste
     getNextRestaurants = async () => {
         const onlyWithImage = await this.returnRestaurantsWithImg(true);
+        // ak API call nenajde restauracie s obrazkami, tak stranka zobrazi No Results
         if (onlyWithImage.length === 0)
             this.setState({restaurantsApi: null});
         else
@@ -100,18 +102,18 @@ class ContextProvider extends React.Component {
 
     getPreviousRestaurants = async () => {
         const onlyWithImage = await this.returnRestaurantsWithImg(false);
+        // ak API call nenajde restauracie s obrazkami, tak stranka zobrazi No Results
         if (onlyWithImage.length === 0)
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
-        window.scrollTo({ top: 0, behavior:"smooth" });
+        window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
     }
 
     restaurantDetail = async (restaurantId) => {
-        const restaurantDetail = await getRestaurantDetail(restaurantId);
-        this.setState({resDetail: restaurantDetail});
-        window.scrollTo({ top: 0, behavior:"smooth" });
-        console.log(restaurantDetail);
+        const restaurantDetail = await getRestaurantDetail(restaurantId); // API call vrati detailne udaje o restauracie
+        this.setState({resDetail: restaurantDetail}); // detailne udaje o restauracii ulozi do stavu a potom ich stranka zobrazi
+        window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
     backFromRestaurantDetail = () => this.setState({resDetail: null});

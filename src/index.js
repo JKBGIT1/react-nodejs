@@ -32,10 +32,10 @@ class App extends React.Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}> {/* V tejto theme su zmenene velkosti nadpisov podla breakpointov */}
-                <ContextProvider> {/* Poskytuje content z Contex.js pre vsetky componenty */}
+                <ContextProvider> {/* Poskytuje content z Context.js pre vsetky componenty */}
                     {/* Slide animacia pre nacitani stranky */}
                     <Slide in={true} direction={"up"} timeout={1000}>
-                        <div id={"top"}>
+                        <div> {/* Aby fungovala Slide animacia je potrebne obalit Header a Main do jedneho komponentu, Fragment nefungoval */}
                             <Header/>
                             <Main locationIds={this.state}/>
                         </div>
