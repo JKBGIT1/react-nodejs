@@ -2,6 +2,8 @@ This project is running on Netlify: https://5f2939c173b3f30008c49121--quizzical-
 
 It was build in React. I used Material-UI library for design. Data about restaurants are fetched from Zomato API.
 
+In the future I would like to make connection to database with nodejs to make users login and registration available. So currently Sing up and Login buttons don't have any functionality.
+
 ## Available Scripts
 
 In the project directory, you can run:
