@@ -54,13 +54,25 @@ class MyDrawer extends React.Component {
                             <SearchIcon color={"inherit"}/>
                         </IconButton>
                     </ListItem>
-                    {/* Treba dorobit prihlasovanie an registraciu uzivatelov */}
-                    <ListItem button>
-                        <ListItemText primary={"Sign up"}/>
-                    </ListItem>
-                    <ListItem button>
-                        <ListItemText primary={"Login"}/>
-                    </ListItem>
+                    {/* Treba dorobit prihlasovanie a registraciu uzivatelov */}
+                    {this.context.logedUser ?
+                        <React.Fragment>
+                            <ListItem button onClick={this.context.goMyFavorite}>
+                                <ListItemText primary={"My Favorite"}/>
+                            </ListItem>
+                            <ListItem button onClick={this.context.logout}>
+                                <ListItemText primary={"Log out"}/>
+                            </ListItem>
+                        </React.Fragment> :
+                        <React.Fragment>
+                            <ListItem button>
+                                <ListItemText primary={"Sign up"} onClick={ () => this.context.goEntry(false) }/>
+                            </ListItem>
+                            <ListItem button onClick={ () => this.context.goEntry(true) }>
+                                <ListItemText primary={"Login"}/>
+                            </ListItem>
+                        </React.Fragment>
+                    }
                 </List>
             </Drawer>
         );

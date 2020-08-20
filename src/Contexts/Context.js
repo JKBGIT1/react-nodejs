@@ -14,6 +14,10 @@ class ContextProvider extends React.Component {
         lastCityFiltered: [], // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
         inputText: "", // nazov mesta, ktory sa po kliknuti na hladat ikonu bude vyhladavat v Zomato API
         cityName: "", // nazov mesta, ktory bol vyhladany
+        clickedEntry: false, // pouzivatel sa chce prihlasit alebo zaregistrovat
+        login: false, // pouzivatel sa chce prihlasit a nie zaregistrovat
+        logedUser: null, // ak bol pouzivatel uspesne zaregistrovany tak ho prihlasi, alebo sa prihlasi pomocou spravnych udajov sam
+        clickedMyFavorite: false, // ak je pouzivatel prihlaseny, tak si moze zobrazit svoje oblubene restauracie
     }
     // aby som mal vzdy aktualnu sirku obrazovky, tak musim po nacitani componentu nadstavit tento EventListener
     componentDidMount() {
@@ -67,7 +71,7 @@ class ContextProvider extends React.Component {
 
     getRestaurantsByCity = async () => {
         let cityId = await getCity(this.state.inputText); // na zaklade nazvu mesta vo vyhladavani najdem jeho ID v API
-        this.setState({ searchingCity: cityId }); // zmenim hodnotu premenej v stave, pretoze sa podla toho renderuje obsah
+        this.setState({ searchingCity: cityId, }); // zmenim hodnotu premenej v stave, pretoze sa podla toho renderuje obsah
 
         if (cityId) { // ak sa naslo ID mesta, tak vyhladam v API vsetky restauracie, ktore sa v nom nachadzaju a maju featured_image
             this.setState({ lastCityFiltered: [0] });
@@ -84,7 +88,11 @@ class ContextProvider extends React.Component {
         }
 
         this.setState({ cityName: this.state.inputText }); // nazov mesta, ktory sa zobrazi
-        this.setState({ clickedSearch: true }); // ak je prve vyhladavanie, tak sa prepne z domovskej stránky
+        this.setState({
+            clickedMyFavorite: false,
+            clickedSearch: true,
+            clickedEntry: false,
+        }); // ak je prve vyhladavanie, tak sa prepne z domovskej stránky
         // pouzivatel moze chcet vyhladat restauracie v inom meste, ked su na stranke zobrazene udaje o restauracie z predosleho mesta
         // preto je potrebne zrusit toho zobrazenie a umoznit zobrazenie novych vysledkov
         this.setState({ resDetail: null});
@@ -122,6 +130,87 @@ class ContextProvider extends React.Component {
     // po kliknuti na input pre vyhladvanie sa vymaze jeho predosla hodnota
     deleteText = (event) => event.target.value = "";
 
+    // domovsku alebo vyhladavaciu stranku moze pouzivatel zmenit kliknutim na Login alebo Sign up
+    goEntry = (login) => this.setState({
+        clickedMyFavorite: false,
+        clickedSearch: false,
+        restaurantsApi: null,
+        searchedCity: null,
+        clickedEntry: true,
+        resDetail: null,
+        inputText: "",
+        cityName: "",
+        login
+    });
+
+    // ak prihlaseny pouzivatel klikne na my favorite, tak sa mu zobrazia jeho oblubene restauracie
+    goMyFavorite = () => this.setState({
+        clickedMyFavorite: true,
+        clickedSearch: false,
+        restaurantsApi: null,
+        clickedEntry: false,
+        resDetail: null,
+    });
+
+    logout = () => this.setState({ logedUser: null, });
+
+    // funkcia rozhoduje, ci sa ma renderovat MyLoginCard alebo MySignUpCard
+    changeEntry = () => {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                login: !prevState.login,
+            }
+        });
+    }
+
+    // Pouzivatel posle svoje user name a password serveru ako query parametre
+    // ak boli prihlasovacie udaje sprave, tak ho prihlasi
+    tryLogin = async (userName, password) => {
+        try {
+            const response = await fetch(`http://localhost:5000/login?userName=${userName}&password=${password}`);
+            const data = await response.json();
+            this.setState({
+                logedUser: data.user,
+                clickedEntry: false,
+                login: false,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        console.log(this.state.logedUser);
+    }
+
+    // Pouzivate zada prihlasovacie udaje a vykona sa registraciu pomocou POST requestu
+    // Ak sa podari pouzivatela zaregistrovat, tak ho system automaticky prihlasi
+    trySignUp = async (firstName, lastName, email, userName, password) => {
+        try {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    userName: userName,
+                    password: password
+                })
+            };
+            const response = await fetch(`http://localhost:5000/signup`, requestOptions);
+            const data = await response.json();
+            this.setState({
+                logedUser: data.user,
+                clickedEntry: false,
+                login: false,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        console.log(this.state.logedUser);
+    }
+
     render() {
         return(
             <Context.Provider
@@ -132,7 +221,13 @@ class ContextProvider extends React.Component {
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,
                         changeInputText: this.changeInputText,
-                        deleteText: this.deleteText
+                        goMyFavorite: this.goMyFavorite,
+                        changeEntry: this.changeEntry,
+                        deleteText: this.deleteText,
+                        trySignUp: this.trySignUp,
+                        tryLogin: this.tryLogin,
+                        goEntry: this.goEntry,
+                        logout: this.logout,
                 }}> {/* ...this.state preda vsetky udaje do value */}
                 {this.props.children} {/* Vsetky elementy, ktore su deti budu mat props z value */}
             </Context.Provider>

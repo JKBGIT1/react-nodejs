@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React from "react";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import Button from "@material-ui/core/Button";
@@ -22,7 +22,7 @@ class DesktopToolBar extends React.Component {
 
     render() {
         return (
-            <Fragment>
+            <React.Fragment>
                 {/* Po kliknuti na input sa vymaze jeho predosla value
                     s value v inpute sa meni aj hodnota inputText v contexte */}
                 <input
@@ -38,9 +38,17 @@ class DesktopToolBar extends React.Component {
                 </IconButton>
                 <div style={{flexGrow: 1}}/>
                 {/* Treba dorobit prihlasovanie a registraciu uzivatelov */}
-                <Button color={"inherit"}>Sign up</Button>
-                <Button color={"inherit"}>Login</Button>
-            </Fragment>
+                {this.context.logedUser ?
+                  <React.Fragment>
+                      <Button color={"inherit"} onClick={this.context.goMyFavorite}>My Favorite</Button>
+                      <Button color={"inherit"} onClick={this.context.logout}>Log out</Button>
+                  </React.Fragment>  :
+                    <React.Fragment>
+                        <Button color={"inherit"} onClick={ () => this.context.goEntry(false) }>Sign up</Button>
+                        <Button color={"inherit"} onClick={ () => this.context.goEntry(true) }>Login</Button>
+                    </React.Fragment>
+                }
+            </React.Fragment>
         );
     }
 }
