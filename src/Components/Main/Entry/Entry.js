@@ -33,8 +33,11 @@ class Entry extends React.Component {
         context.trySignUp(firstName, lastName, email, userName, password);
         this.setState({
             loading: false,
+            firstName: "",
             userName: "",
             password: "",
+            lastName: "",
+            email: "",
         });
     }
 
