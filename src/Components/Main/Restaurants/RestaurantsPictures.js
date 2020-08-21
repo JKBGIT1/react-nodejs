@@ -11,7 +11,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 export const RestaurantsPictures = (props) => {
     let displayCollection;
     const { context } = props;
-    const { screenWidth } = props;
+    const { screenWidth } = context;
     const numOfCols = screenWidth < 600 ? 1 : 2;
     const height = screenWidth < 1280 ? 250 : 360;
 
