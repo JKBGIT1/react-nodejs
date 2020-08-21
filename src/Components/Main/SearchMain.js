@@ -1,8 +1,8 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import {Context} from "../../Contexts/Context";
-import Restaurants from "./Restaurants";
-import RestaurantDetail from "./RestaurantDetail";
+import { Context } from "../../Contexts/Context";
+import Restaurants from "./Restaurants/Restaurants";
+import RestaurantDetail from "./Restaurants/RestaurantDetail";
 
 class SearchMain extends React.Component {
     render() {
@@ -19,8 +19,7 @@ class SearchMain extends React.Component {
                         style={{margin: `${margin} 0 ${margin} 0`}}
                     >
                         <Grid item md={10} style={{ width: "100%" }}>
-                            {context.resDetail ? <RestaurantDetail context={context}/> :
-                                <Restaurants context={context}/>}
+                            {context.resDetail ? <RestaurantDetail context={context}/> : <Restaurants context={context}/>}
                         </Grid>
                     </Grid>
                 );

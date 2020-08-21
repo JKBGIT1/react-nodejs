@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
+import IconButton from '@material-ui/core/IconButton';
 
 class RestaurantDetail extends React.Component {
     constructor(props) {
@@ -62,6 +65,13 @@ const RestaurantActions = (props) => {
                 Events
             </Button>
             <div style={{ flexGrow: 1 }}/>
+            {/* Ak je pouzivatel prihlaseny, si tuto restauraciu moze pridat do svojich oblubenych */}
+            {props.context.logedUser ?
+                <IconButton size={btnSize} onClick={props.context.addToFavorite}>
+                    <StarBorderIcon/>
+                </IconButton> :
+                null
+            }
             {/* Vrati pouzivatela spat na prehlad restauracii, ktore boli vyhladane */}
             <Button
                 size={btnSize}

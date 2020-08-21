@@ -6,7 +6,10 @@ export const Context = createContext(); // Potrebne pre vyuzivanie Context API
 class ContextProvider extends React.Component {
     state = {
         screenWidth: window.innerWidth, // componenty budu podla sirky obrazovky v providerovi renderovat rozne elementy
+        clickedMyFavorite: false, // ak je pouzivatel prihlaseny, tak si moze zobrazit svoje oblubene restauracie
         clickedSearch: false, // po prvom vyhladani sa uz nikdy nezobrazi uvodna stranka
+        clickedEntry: false, // pouzivatel sa chce prihlasit alebo zaregistrovat
+        login: false, // pouzivatel sa chce prihlasit a nie zaregistrovat
         resDetail: null, // vsetky informacie o restauracie z API callu
         searchingCity: null, // sem sa ulozi id vyhladavaneho mesta z API callu
         restaurantsApi: null, // sem ulozim vyhladane restauracie z api
@@ -14,10 +17,7 @@ class ContextProvider extends React.Component {
         lastCityFiltered: [], // posledne mesto z desiatich v restaurantsApi, ktore malo featured_image
         inputText: "", // nazov mesta, ktory sa po kliknuti na hladat ikonu bude vyhladavat v Zomato API
         cityName: "", // nazov mesta, ktory bol vyhladany
-        clickedEntry: false, // pouzivatel sa chce prihlasit alebo zaregistrovat
-        login: false, // pouzivatel sa chce prihlasit a nie zaregistrovat
         logedUser: null, // ak bol pouzivatel uspesne zaregistrovany tak ho prihlasi, alebo sa prihlasi pomocou spravnych udajov sam
-        clickedMyFavorite: false, // ak je pouzivatel prihlaseny, tak si moze zobrazit svoje oblubene restauracie
     }
     // aby som mal vzdy aktualnu sirku obrazovky, tak musim po nacitani componentu nadstavit tento EventListener
     componentDidMount() {
@@ -82,20 +82,24 @@ class ContextProvider extends React.Component {
             else
                 this.setState({restaurantsApi: onlyWithImage});
         } else { // ak sa mesto v API nenachadza, tak musim anulovat tieto veci v stave
-            this.setState({ lastCityBeginFiltered: [] });
-            this.setState({ restaurantsApi: null });
-            this.setState({ lastCityFiltered: [] });
+            this.setState({
+                lastCityBeginFiltered: [],
+                lastCityFiltered: [],
+                restaurantsApi: null,
+            });
         }
-
-        this.setState({ cityName: this.state.inputText }); // nazov mesta, ktory sa zobrazi
         this.setState({
+            cityName: this.state.inputText, // nazov mesta, ktory sa zobrazi
+            // z MyFavorite prepne na vyhladavanie
             clickedMyFavorite: false,
             clickedSearch: true,
+            // z prihlasovanie prepne na vyhladavanie
             clickedEntry: false,
+            // pouzivatel moze chcet vyhladat restauracie v inom meste, ked su na stranke zobrazene udaje o restauracie z predosleho mesta
+            // preto je potrebne zrusit toho zobrazenie a umoznit zobrazenie novych vysledkov
+            resDetail: null,
         }); // ak je prve vyhladavanie, tak sa prepne z domovskej stránky
-        // pouzivatel moze chcet vyhladat restauracie v inom meste, ked su na stranke zobrazene udaje o restauracie z predosleho mesta
-        // preto je potrebne zrusit toho zobrazenie a umoznit zobrazenie novych vysledkov
-        this.setState({ resDetail: null});
+
     };
     // ak je mozne, tak sa prepne na nasledujucu kartu s restauraciami v zadanom meste
     getNextRestaurants = async () => {
@@ -105,6 +109,7 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
+
         window.scrollTo({ top: 0, behavior:"smooth" });
     }
 
@@ -115,12 +120,13 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: null});
         else
             this.setState({restaurantsApi: onlyWithImage});
+
         window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
     }
 
     restaurantDetail = async (restaurantId) => {
         const restaurantDetail = await getRestaurantDetail(restaurantId); // API call vrati detailne udaje o restauracie
-        this.setState({resDetail: restaurantDetail}); // detailne udaje o restauracii ulozi do stavu a potom ich stranka zobrazi
+        this.setState({ resDetail: restaurantDetail }); // detailne udaje o restauracii ulozi do stavu a potom ich stranka zobrazi
         window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
@@ -149,10 +155,17 @@ class ContextProvider extends React.Component {
         clickedSearch: false,
         restaurantsApi: null,
         clickedEntry: false,
+        searchedCity: null,
         resDetail: null,
     });
 
-    logout = () => this.setState({ logedUser: null, });
+    logout = () => this.setState({
+        clickedMyFavorite: false,
+        clickedSearch: false,
+        clickedEntry: false,
+        logedUser: null,
+        resDetail: null,
+    });
 
     // funkcia rozhoduje, ci sa ma renderovat MyLoginCard alebo MySignUpCard
     changeEntry = () => {
@@ -211,6 +224,36 @@ class ContextProvider extends React.Component {
         console.log(this.state.logedUser);
     }
 
+    addToFavorite = async () => {
+        const { featured_image, name } = this.state.resDetail;
+        const { address } = this.state.resDetail.location;
+        const { id } = this.state.resDetail;
+
+        try {
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userName: this.state.logedUser.userName,
+                    restaurantDetail: {
+                        id,
+                        name,
+                        address,
+                        featured_image,
+                    }
+                })
+            };
+            const response = await fetch("http://localhost:5000/myfavorite", requestOptions);
+            const data = await response.json();
+            this.setState({
+                logedUser: data.user
+            });
+            console.log(this.state.logedUser);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     render() {
         return(
             <Context.Provider
@@ -221,6 +264,7 @@ class ContextProvider extends React.Component {
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,
                         changeInputText: this.changeInputText,
+                        addToFavorite: this.addToFavorite,
                         goMyFavorite: this.goMyFavorite,
                         changeEntry: this.changeEntry,
                         deleteText: this.deleteText,

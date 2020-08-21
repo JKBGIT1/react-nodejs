@@ -1,5 +1,15 @@
 import React from "react";
-import {Card, Grid, Button, CardActions, CardContent, CardHeader, CardMedia, Typography} from "@material-ui/core";
+import {
+    Card,
+    Grid,
+    Button,
+    CardActions,
+    CardContent,
+    CardHeader,
+    CardMedia,
+    Typography,
+    TextField
+} from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
 
 export const MySignUpCard = (props) => {
@@ -7,9 +17,9 @@ export const MySignUpCard = (props) => {
     const { firstName, lastName, email, userName, password } = props.state;
 
     return (
-        <Grid item md={4} style={{ width: "100%" }}>
+        <Grid item md={6} style={{ width: "100%" }}>
             <Fade in={true} timeout={1000}>
-                <Card>
+                <Card style={{ margin: "0 8px 0 8px" }}>
                     <CardHeader
                         title={"Sign up"}
                         style={{ textAlign: "center" }}
@@ -21,59 +31,53 @@ export const MySignUpCard = (props) => {
                     />
                     <CardContent style={{ margin: "auto", width: "60%" }}>
                         <Grid container alignItems={"center"} justify={"center"}>
-                            <Grid item xs={6}>
-                                <Typography style={{ padding: "1%"}}>
-                                    First Name:
-                                </Typography>
-                                <Typography style={{ padding: "1%"}}>
-                                    Last Name:
-                                </Typography>
-                                <Typography style={{ padding: "1%"}}>
-                                    Email:
-                                </Typography >
-                                <Typography style={{ padding: "1%"}}>
-                                    User Name:
-                                </Typography>
-                                <Typography style={{ padding: "1%"}}>
-                                    Password:
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <input
-                                    type={"text"}
-                                    value={firstName}
-                                    placeholder={"First Name"}
-                                    onChange={props.updateFirstName}
-                                    style={{ margin: "3%", padding: "1%", border: "none" }}
-                                />
-                                <input
-                                    type={"text"}
-                                    value={lastName}
-                                    placeholder={"Last Name"}
-                                    onChange={props.updateLastName}
-                                    style={{ margin: "3%", padding: "1%", border: "none" }}
-                                />
-                                <input
-                                    type={"text"}
-                                    value={email}
-                                    placeholder={"Email"}
-                                    onChange={props.updateEmail}
-                                    style={{ margin: "3%", padding: "1%", border: "none" }}
-                                />
-                                <input
-                                    type={"text"}
-                                    value={userName}
-                                    placeholder={"User Name"}
-                                    onChange={props.updateUserName}
-                                    style={{ margin: "3%", padding: "1%", border: "none" }}
-                                />
-                                <input
-                                    type={"text"}
-                                    value={password}
-                                    placeholder={"Password"}
-                                    onChange={props.updatePassword}
-                                    style={{ margin: "3%", padding: "1%", border: "none" }}
-                                />
+                            <Grid item xs={10}>
+                                <form noValidate autoComplete="off">
+                                    <TextField
+                                        value={firstName}
+                                        label="First Name"
+                                        id="standard-basic"
+                                        onChange={props.updateFirstName}
+                                        style={{ width: "100%", margin: "1%" }}
+                                    />
+                                </form>
+                                <form noValidate autoComplete="off">
+                                    <TextField
+                                        value={lastName}
+                                        label="Last Name"
+                                        id="standard-basic"
+                                        onChange={props.updateLastName}
+                                        style={{ width: "100%", margin: "1%" }}
+                                    />
+                                </form>
+                                <form noValidate autoComplete="off">
+                                    <TextField
+                                        value={email}
+                                        label="Email"
+                                        id="standard-basic"
+                                        onChange={props.updateEmail}
+                                        style={{ width: "100%", margin: "1%" }}
+                                    />
+                                </form>
+                                <form noValidate autoComplete="off">
+                                    <TextField
+                                        value={userName}
+                                        label="User Name"
+                                        id="standard-basic"
+                                        onChange={props.updateUserName}
+                                        style={{ width: "100%", margin: "1%" }}
+                                    />
+                                </form>
+                                <form noValidate autoComplete="off">
+                                    <TextField
+                                        value={password}
+                                        label="Password"
+                                        type={"password"}
+                                        id="standard-adornment-password"
+                                        onChange={props.updatePassword}
+                                        style={{ width: "100%", margin: "1%" }}
+                                    />
+                                </form>
                             </Grid>
                         </Grid>
                     </CardContent>
