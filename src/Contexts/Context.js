@@ -127,7 +127,7 @@ class ContextProvider extends React.Component {
     restaurantDetail = async (restaurantId) => {
         const restaurantDetail = await getRestaurantDetail(restaurantId); // API call vrati detailne udaje o restauracie
         this.setState({ resDetail: restaurantDetail }); // detailne udaje o restauracii ulozi do stavu a potom ich stranka zobrazi
-        window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
+        window.scrollTo({ top: 0, behavior: "smooth" }); // okno sa zoscrolluje az na vrch
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
     backFromRestaurantDetail = () => this.setState({resDetail: null});
@@ -137,27 +137,33 @@ class ContextProvider extends React.Component {
     deleteText = (event) => event.target.value = "";
 
     // domovsku alebo vyhladavaciu stranku moze pouzivatel zmenit kliknutim na Login alebo Sign up
-    goEntry = (login) => this.setState({
-        clickedMyFavorite: false,
-        clickedSearch: false,
-        restaurantsApi: null,
-        searchedCity: null,
-        clickedEntry: true,
-        resDetail: null,
-        inputText: "",
-        cityName: "",
-        login
-    });
+    goEntry = (login) => {
+        window.scrollTo({ top: 0, behavior: "smooth"});
+        this.setState({
+            clickedMyFavorite: false,
+            clickedSearch: false,
+            restaurantsApi: null,
+            searchedCity: null,
+            clickedEntry: true,
+            resDetail: null,
+            inputText: "",
+            cityName: "",
+            login
+        });
+    }
 
     // ak prihlaseny pouzivatel klikne na my favorite, tak sa mu zobrazia jeho oblubene restauracie
-    goMyFavorite = () => this.setState({
-        clickedMyFavorite: true,
-        clickedSearch: false,
-        restaurantsApi: null,
-        clickedEntry: false,
-        searchedCity: null,
-        resDetail: null,
-    });
+    goMyFavorite = () => {
+        window.scrollTo({ top: 0, behavior: "smooth"});
+        this.setState({
+            clickedMyFavorite: true,
+            clickedSearch: false,
+            restaurantsApi: null,
+            clickedEntry: false,
+            searchedCity: null,
+            resDetail: null,
+        });
+    }
 
     logout = () => this.setState({
         clickedMyFavorite: false,
@@ -167,34 +173,28 @@ class ContextProvider extends React.Component {
         resDetail: null,
     });
 
-    // funkcia rozhoduje, ci sa ma renderovat MyLoginCard alebo MySignUpCard
-    changeEntry = () => {
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                login: !prevState.login,
-            }
-        });
-    }
-
     // Pouzivatel posle svoje user name a password serveru ako query parametre
     // ak boli prihlasovacie udaje sprave, tak ho prihlasi
     tryLogin = async (userName, password) => {
         try {
             const response = await fetch(`http://localhost:5000/login?userName=${userName}&password=${password}`);
             const data = await response.json();
-            this.setState({
-                logedUser: data.user,
-                clickedEntry: false,
-                login: false,
-            });
+
+            if (data.user)
+                this.setState({
+                    logedUser: data.user,
+                    clickedEntry: false,
+                    login: false,
+                });
+            else {
+                this.setState({ logedUser: data.user });
+                alert("Incorrect User Name or Password.");
+            }
         } catch (error) {
             console.log(error);
         }
-
-        console.log(this.state.logedUser);
+        console.log(this.state.logedUser.userName);
     }
-
     // Pouzivate zada prihlasovacie udaje a vykona sa registraciu pomocou POST requestu
     // Ak sa podari pouzivatela zaregistrovat, tak ho system automaticky prihlasi
     trySignUp = async (firstName, lastName, email, userName, password) => {
@@ -220,7 +220,7 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
-
+        console.log(this.state.logedUser.userName);
         console.log(this.state.logedUser);
     }
 
@@ -248,10 +248,31 @@ class ContextProvider extends React.Component {
             this.setState({
                 logedUser: data.user
             });
-            console.log(this.state.logedUser);
         } catch (error) {
             console.log(error);
         }
+        console.log(this.state.logedUser.userName);
+    }
+
+    deleteFromFavorite = async () => {
+        try {
+            const requestOptions = {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userName: this.state.logedUser.userName,
+                    restaurantId: this.state.resDetail.id,
+                })
+            }
+            const response = await fetch("http://localhost:5000/myfavorite", requestOptions);
+            const data = await response.json();
+            this.setState({
+                logedUser: data.user
+            });
+        } catch (error) {
+            console.log(error);
+        }
+        console.log(this.state.logedUser.userName);
     }
 
     render() {
@@ -260,6 +281,7 @@ class ContextProvider extends React.Component {
                 value={{...this.state,
                         backFromRestaurantDetail: this.backFromRestaurantDetail,
                         getPreviousRestaurants: this.getPreviousRestaurants,
+                        deleteFromFavorite: this.deleteFromFavorite,
                         getNextRestaurants: this.getNextRestaurants,
                         getResByCity: this.getRestaurantsByCity,
                         restaurantDetail: this.restaurantDetail,

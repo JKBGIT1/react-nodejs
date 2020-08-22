@@ -7,7 +7,6 @@ import {
     CardContent,
     CardHeader,
     CardMedia,
-    Typography,
     TextField
 } from "@material-ui/core";
 import Fade from "@material-ui/core/Fade";
@@ -83,7 +82,10 @@ export const MySignUpCard = (props) => {
                     </CardContent>
                     <CardActions disableSpacing>
                         <Button size="medium" style={{ width: "100%" }} onClick={() => props.handleSignUp(context)}>Sign up</Button>
-                        <Button size="medium" style={{ width: "100%" }} onClick={context.changeEntry}>Have an account</Button>
+                        <Button size="medium" style={{ width: "100%" }} onClick={() => {
+                            props.changeOfEntry();
+                            context.goEntry(true);
+                        }}>Have an account</Button>
                     </CardActions>
                 </Card>
             </Fade>

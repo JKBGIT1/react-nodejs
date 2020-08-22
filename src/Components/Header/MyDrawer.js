@@ -27,6 +27,16 @@ class MyDrawer extends React.Component {
         props.handleDrawer(); // ked API vrati restauracie, tak sa Drawer zavrie
     }
 
+    myFavoriteClicked = (context, props) => {
+        context.goMyFavorite();
+        props.handleDrawer();
+    }
+
+    logoutClicked = (context, props) => {
+        context.logout();
+        props.handleDrawer();
+    }
+
     static contextType = Context; // dostanem udaje z Context.js,
 
     render() {
@@ -57,10 +67,10 @@ class MyDrawer extends React.Component {
                     {/* Treba dorobit prihlasovanie a registraciu uzivatelov */}
                     {this.context.logedUser ?
                         <React.Fragment>
-                            <ListItem button onClick={this.context.goMyFavorite}>
+                            <ListItem button onClick={() => this.myFavoriteClicked(this.context, this.props)}>
                                 <ListItemText primary={"My Favorite"}/>
                             </ListItem>
-                            <ListItem button onClick={this.context.logout}>
+                            <ListItem button onClick={() => this.logoutClicked(this.context, this.props)}>
                                 <ListItemText primary={"Log out"}/>
                             </ListItem>
                         </React.Fragment> :

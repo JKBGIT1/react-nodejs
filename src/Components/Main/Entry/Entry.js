@@ -41,6 +41,14 @@ class Entry extends React.Component {
         });
     }
 
+    changeOfEntry = () => this.setState({
+        firstName: "",
+        lastName: "",
+        userName: "",
+        password: "",
+        email: "",
+    })
+
     updateUserName = (event) => this.setState({ userName: event.target.value });
 
     updatePassword = (event) => this.setState({ password: event.target.value });
@@ -72,6 +80,7 @@ class Entry extends React.Component {
                                 context={context}
                                 state={this.state}
                                 handleLogin={this.handleLogin}
+                                changeOfEntry={this.changeOfEntry}
                                 updateUserName={this.updateUserName}
                                 updatePassword={this.updatePassword}
                             /> :
@@ -79,6 +88,7 @@ class Entry extends React.Component {
                                 context={context}
                                 state={this.state}
                                 handleSignUp={this.handleSignUp}
+                                changeOfEntry={this.changeOfEntry}
                                 updateUserName={this.updateUserName}
                                 updatePassword={this.updatePassword}
                                 updateFirstName={this.updateFirstName}

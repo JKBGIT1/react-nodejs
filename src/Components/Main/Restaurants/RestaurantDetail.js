@@ -67,9 +67,13 @@ const RestaurantActions = (props) => {
             <div style={{ flexGrow: 1 }}/>
             {/* Ak je pouzivatel prihlaseny, si tuto restauraciu moze pridat do svojich oblubenych */}
             {props.context.logedUser ?
-                <IconButton size={btnSize} onClick={props.context.addToFavorite}>
-                    <StarBorderIcon/>
-                </IconButton> :
+                props.context.logedUser.favoriteRestaurants.find(res => props.restaurant.id === res.id) ?
+                    <IconButton size={btnSize} onClick={props.context.deleteFromFavorite}>
+                        <StarIcon/>
+                    </IconButton> :
+                    <IconButton size={btnSize} onClick={props.context.addToFavorite}>
+                        <StarBorderIcon/>
+                    </IconButton> :
                 null
             }
             {/* Vrati pouzivatela spat na prehlad restauracii, ktore boli vyhladane */}

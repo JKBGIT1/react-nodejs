@@ -45,7 +45,10 @@ export const MyLoginCard = (props) => {
                     </CardContent>
                     <CardActions disableSpacing>
                         <Button size="medium" style={{ width: "100%" }} onClick={() => props.handleLogin(context)}>Login</Button>
-                        <Button size="medium" style={{ width: "100%" }} onClick={context.changeEntry}>Create account</Button>
+                        <Button size="medium" style={{ width: "100%" }} onClick={() => {
+                            props.changeOfEntry();
+                            context.goEntry(false);
+                        }}>Create account</Button>
                     </CardActions>
                 </Card>
             </Fade>
