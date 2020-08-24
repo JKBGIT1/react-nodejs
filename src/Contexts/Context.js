@@ -193,7 +193,6 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
-        console.log(this.state.logedUser.userName);
     }
     // Pouzivate zada prihlasovacie udaje a vykona sa registraciu pomocou POST requestu
     // Ak sa podari pouzivatela zaregistrovat, tak ho system automaticky prihlasi
@@ -212,16 +211,20 @@ class ContextProvider extends React.Component {
             };
             const response = await fetch(`http://localhost:5000/signup`, requestOptions);
             const data = await response.json();
-            this.setState({
-                logedUser: data.user,
-                clickedEntry: false,
-                login: false,
-            });
+
+            if (data.user)
+                this.setState({
+                    logedUser: data.user,
+                    clickedEntry: false,
+                    login: false,
+                });
+            else {
+                this.setState({ logedUser: data.user });
+                alert("User Name already exists.");
+            }
         } catch (error) {
             console.log(error);
         }
-        console.log(this.state.logedUser.userName);
-        console.log(this.state.logedUser);
     }
 
     addToFavorite = async () => {
@@ -251,7 +254,6 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
-        console.log(this.state.logedUser.userName);
     }
 
     deleteFromFavorite = async () => {
@@ -272,7 +274,6 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
-        console.log(this.state.logedUser.userName);
     }
 
     render() {
