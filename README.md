@@ -1,10 +1,10 @@
 ## About project
 
-This project is running on Netlify: https://5f2939c173b3f30008c49121--quizzical-gates-5c6d53.netlify.app/
+This project is running on Netlify: https://myrestaurantsweb.netlify.app/
 
 It was build in React. I used Material-UI library for design. Data about restaurants are fetched from Zomato API.
 
-In the future I would like to make connection to database with nodejs to make users login and registration available. So currently Sing up and Login buttons don't have any functionality.
+This site is connected with my own server and stores data about users on MongoDB.
 
 ## Available Scripts
 
