@@ -177,7 +177,7 @@ class ContextProvider extends React.Component {
     // ak boli prihlasovacie udaje sprave, tak ho prihlasi
     tryLogin = async (userName, password) => {
         try {
-            const response = await fetch(`http://localhost:5000/login?userName=${userName}&password=${password}`);
+            const response = await fetch(`https://react-nodejs-server.herokuapp.com/login?userName=${userName}&password=${password}`);
             const data = await response.json();
 
             if (data.user)
@@ -209,7 +209,7 @@ class ContextProvider extends React.Component {
                     password: password
                 })
             };
-            const response = await fetch(`http://localhost:5000/signup`, requestOptions);
+            const response = await fetch(`https://react-nodejs-server.herokuapp.com/signup`, requestOptions);
             const data = await response.json();
 
             if (data.user)
@@ -246,7 +246,7 @@ class ContextProvider extends React.Component {
                     }
                 })
             };
-            const response = await fetch("http://localhost:5000/myfavorite", requestOptions);
+            const response = await fetch("https://react-nodejs-server.herokuapp.com/myfavorite", requestOptions);
             const data = await response.json();
             this.setState({
                 logedUser: data.user
@@ -266,7 +266,7 @@ class ContextProvider extends React.Component {
                     restaurantId: this.state.resDetail.id,
                 })
             }
-            const response = await fetch("http://localhost:5000/myfavorite", requestOptions);
+            const response = await fetch("https://react-nodejs-server.herokuapp.com/myfavorite", requestOptions);
             const data = await response.json();
             this.setState({
                 logedUser: data.user
