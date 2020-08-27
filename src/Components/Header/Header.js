@@ -19,6 +19,7 @@ class Header extends React.Component {
                         Restaurants
                     </Typography>
                     <Context.Consumer>{(context) => {
+                        // podla toho aka je sirka stranky sa zobrazi component
                         return context.screenWidth > 600 ? <DesktopToolBar/> : <MobileMenu/>;
                     }}</Context.Consumer>
                 </Toolbar>

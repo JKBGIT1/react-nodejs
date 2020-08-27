@@ -37,7 +37,8 @@ class DesktopToolBar extends React.Component {
                     <SearchIcon color={"inherit"}/>
                 </IconButton>
                 <div style={{flexGrow: 1}}/>
-                {/* Treba dorobit prihlasovanie a registraciu uzivatelov */}
+                {/* Ak je pouzivatel prihlaseny, tak moze zobrazit svoje oblubene restauracie alebo sa odlhlasit */}
+                {/* Ked pouzivatel nie je prihlaseny, tak sa moze prihlasit alebo vytvorit novy ucet */}
                 {this.context.logedUser ?
                   <React.Fragment>
                       <Button color={"inherit"} onClick={this.context.goMyFavorite}>My Favorite</Button>

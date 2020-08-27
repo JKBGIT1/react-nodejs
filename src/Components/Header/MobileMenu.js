@@ -7,7 +7,7 @@ class MobileMenu extends React.Component {
     state = {
         showDrawer: false // ak je hodnota tejto premenej false, tak je Drawer
     }
-
+    // otvara a zatvara Drawer
     handleDrawer = () => this.setState({ showDrawer: !this.state.showDrawer});
 
     render() {

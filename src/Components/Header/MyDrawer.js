@@ -26,17 +26,17 @@ class MyDrawer extends React.Component {
         context.getResByCity(); // API call na restauracie vo vyhladavanom meste
         props.handleDrawer(); // ked API vrati restauracie, tak sa Drawer zavrie
     }
-
+    // zobrazi oblubene restauracie pouzivatele a zavrie Drawer
     myFavoriteClicked = (context, props) => {
         context.goMyFavorite();
         props.handleDrawer();
     }
-
+    // odhlasi pouzivatela sa zavrie Drawer
     logoutClicked = (context, props) => {
         context.logout();
         props.handleDrawer();
     }
-
+    // Zobrazi Login alebo SignUp a zavrie Drawer
     entryClicked = (context, props, login) => {
         context.goEntry(login);
         props.handleDrawer();
@@ -69,7 +69,8 @@ class MyDrawer extends React.Component {
                             <SearchIcon color={"inherit"}/>
                         </IconButton>
                     </ListItem>
-                    {/* Treba dorobit prihlasovanie a registraciu uzivatelov */}
+                    {/* Ak je pouzivatel prihlaseny, tak moze zobrazit svoje oblubene restauracie alebo sa odlhlasit */}
+                    {/* Ked pouzivatel nie je prihlaseny, tak sa moze prihlasit alebo vytvorit novy ucet */}
                     {this.context.logedUser ?
                         <React.Fragment>
                             <ListItem button onClick={() => this.myFavoriteClicked(this.context, this.props)}>
