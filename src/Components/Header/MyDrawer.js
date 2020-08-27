@@ -37,6 +37,11 @@ class MyDrawer extends React.Component {
         props.handleDrawer();
     }
 
+    entryClicked = (context, props, login) => {
+        context.goEntry(login);
+        props.handleDrawer();
+    }
+
     static contextType = Context; // dostanem udaje z Context.js,
 
     render() {
@@ -75,10 +80,10 @@ class MyDrawer extends React.Component {
                             </ListItem>
                         </React.Fragment> :
                         <React.Fragment>
-                            <ListItem button>
-                                <ListItemText primary={"Sign up"} onClick={ () => this.context.goEntry(false) }/>
+                            <ListItem button onClick={ () => this.entryClicked(this.context, this.props, false)}>
+                                <ListItemText primary={"Sign up"}/>
                             </ListItem>
-                            <ListItem button onClick={ () => this.context.goEntry(true) }>
+                            <ListItem button onClick={ () => this.entryClicked(this.context, this.props, true)}>
                                 <ListItemText primary={"Login"}/>
                             </ListItem>
                         </React.Fragment>

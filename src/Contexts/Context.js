@@ -9,6 +9,7 @@ class ContextProvider extends React.Component {
         clickedMyFavorite: false, // ak je pouzivatel prihlaseny, tak si moze zobrazit svoje oblubene restauracie
         clickedSearch: false, // po prvom vyhladani sa uz nikdy nezobrazi uvodna stranka
         clickedEntry: false, // pouzivatel sa chce prihlasit alebo zaregistrovat
+        loadingScreen: false, // ak pouzivate taha data zo Zomato API alebo z databazy, tak sa pocas toho zobrazi loading screen
         login: false, // pouzivatel sa chce prihlasit a nie zaregistrovat
         resDetail: null, // vsetky informacie o restauracie z API callu
         searchingCity: null, // sem sa ulozi id vyhladavaneho mesta z API callu
@@ -70,6 +71,7 @@ class ContextProvider extends React.Component {
     }
 
     getRestaurantsByCity = async () => {
+        this.setState({ loadingScreen: true }); // zobrazi spinner
         let cityId = await getCity(this.state.inputText); // na zaklade nazvu mesta vo vyhladavani najdem jeho ID v API
         this.setState({ searchingCity: cityId, }); // zmenim hodnotu premenej v stave, pretoze sa podla toho renderuje obsah
 
@@ -90,6 +92,7 @@ class ContextProvider extends React.Component {
         }
         this.setState({
             cityName: this.state.inputText, // nazov mesta, ktory sa zobrazi
+            loadingScreen: false, // zobrazi vysledky namiesto spinneru
             // z MyFavorite prepne na vyhladavanie
             clickedMyFavorite: false,
             clickedSearch: true,
@@ -103,6 +106,7 @@ class ContextProvider extends React.Component {
     };
     // ak je mozne, tak sa prepne na nasledujucu kartu s restauraciami v zadanom meste
     getNextRestaurants = async () => {
+        this.setState({ loadingScreen: true });
         const onlyWithImage = await this.returnRestaurantsWithImg(true);
         // ak API call nenajde restauracie s obrazkami, tak stranka zobrazi No Results
         if (onlyWithImage.length === 0)
@@ -111,9 +115,11 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: onlyWithImage});
 
         window.scrollTo({ top: 0, behavior:"smooth" });
+        this.setState({ loadingScreen: false });
     }
 
     getPreviousRestaurants = async () => {
+        this.setState({ loadingScreen: true });
         const onlyWithImage = await this.returnRestaurantsWithImg(false);
         // ak API call nenajde restauracie s obrazkami, tak stranka zobrazi No Results
         if (onlyWithImage.length === 0)
@@ -122,15 +128,18 @@ class ContextProvider extends React.Component {
             this.setState({restaurantsApi: onlyWithImage});
 
         window.scrollTo({ top: 0, behavior:"smooth" }); // okno sa zoscrolluje az na vrch
+        this.setState({ loadingScreen: false });
     }
 
     restaurantDetail = async (restaurantId) => {
+        this.setState({ loadingScreen: true });
         const restaurantDetail = await getRestaurantDetail(restaurantId); // API call vrati detailne udaje o restauracie
         this.setState({ resDetail: restaurantDetail }); // detailne udaje o restauracii ulozi do stavu a potom ich stranka zobrazi
         window.scrollTo({ top: 0, behavior: "smooth" }); // okno sa zoscrolluje az na vrch
+        this.setState({ loadingScreen: false });
     }
     // ked sa chce zakaznik znova dostat na zobrazenie restauracii, tak sa vykona tato funkcia
-    backFromRestaurantDetail = () => this.setState({resDetail: null});
+    backFromRestaurantDetail = () => this.setState({ resDetail: null });
     // vzdy ked sa zmeni hodnota v inpute pre search, tak sa zmeni hodnota v this.state.inputText
     changeInputText = (event) => this.setState({inputText: event.target.value});
     // po kliknuti na input pre vyhladvanie sa vymaze jeho predosla hodnota
@@ -176,6 +185,7 @@ class ContextProvider extends React.Component {
     // Pouzivatel posle svoje user name a password serveru ako query parametre
     // ak boli prihlasovacie udaje sprave, tak ho prihlasi
     tryLogin = async (userName, password) => {
+        this.setState({ loadingScreen: true });
         try {
             const response = await fetch(`https://react-nodejs-server.herokuapp.com/login?userName=${userName}&password=${password}`);
             const data = await response.json();
@@ -193,10 +203,12 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
+        this.setState({ loadingScreen: false });
     }
     // Pouzivate zada prihlasovacie udaje a vykona sa registraciu pomocou POST requestu
     // Ak sa podari pouzivatela zaregistrovat, tak ho system automaticky prihlasi
     trySignUp = async (firstName, lastName, email, userName, password) => {
+        this.setState({ loadingScreen: true });
         try {
             const requestOptions = {
                 method: 'POST',
@@ -225,6 +237,7 @@ class ContextProvider extends React.Component {
         } catch (error) {
             console.log(error);
         }
+        this.setState({ loadingScreen: false });
     }
 
     addToFavorite = async () => {
@@ -289,7 +302,6 @@ class ContextProvider extends React.Component {
                         changeInputText: this.changeInputText,
                         addToFavorite: this.addToFavorite,
                         goMyFavorite: this.goMyFavorite,
-                        changeEntry: this.changeEntry,
                         deleteText: this.deleteText,
                         trySignUp: this.trySignUp,
                         tryLogin: this.tryLogin,

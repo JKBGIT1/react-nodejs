@@ -78,7 +78,6 @@ const GridListSubheader = (props) => {
                     </ListSubheader>
                 }
             </Grid>
-            {/* TREBA SPRAVIT PREPINIE PRE MY FAVORITE */}
             {/* Podla toho, ci je mozne sa prepnut na predoslu alebo nasledujucu kartu s restauraciam sa zobrazia sipky */}
             {context.clickedSearch ?
                 <Grid item style={{ paddingLeft: "16px", paddingRight: "16px" }}>
