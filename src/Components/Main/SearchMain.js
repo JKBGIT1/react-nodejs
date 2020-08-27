@@ -16,7 +16,7 @@ class SearchMain extends React.Component {
                         justify={"center"}
                         direction={"column"}
                         alignItems={"center"}
-                        style={{margin: `${margin} 0 ${margin} 0`}}
+                        style={{margin: `${margin} 0 6px 0`}}
                     >
                         <Grid item md={10} style={{ width: "100%" }}>
                             {context.resDetail ? <RestaurantDetail context={context}/> : <Restaurants context={context}/>}
